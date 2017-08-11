@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "696878459615",
+    "firebase_url": "https://svercbook.firebaseio.com",
+    "project_id": "svercbook",
+    "storage_bucket": "svercbook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696878459615:android:e5a19938e74b9d23",
+        "android_client_info": {
+          "package_name": "com.syllabook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696878459615-vj311qiaovrcmvoqb4a9tt958vlst88p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSaQLnxDqys1t6yFMVm2lKayGUo6_vrEI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
