@@ -10,9 +10,9 @@ import { ListOfTopics } from './mainpart/listOfTopics';
 import TopicList from "./mainpart/topic";
 import { Topics } from "./mainpart/topics";
 import ListOfPhotos from './mainpart/images';
-import { Photo as Ph } from './camera/photo';
+import Photo from './camera/photo';
 import { AddATopic } from './mainpart/addATopic';
-import { AddASubject } from './mainpart/addASubject';
+import AddASubject from './mainpart/addASubject';
 import { CreateNewGroup } from './auth/createNewGroup';
 import { Register } from './auth/register';
 import Login from './auth/login';
@@ -51,7 +51,7 @@ export const Handle = StackNavigator({
     }
   },
   Photo: {
-    screen: Ph,
+    screen: Photo,
     navigationOptions: {
       title: 'Take a photo',
     }
@@ -68,7 +68,9 @@ export const Handle = StackNavigator({
       title: "Add a subject",
     }
   }
-});
+}, {
+    initialRouteName: 'Grades',
+  });
 
 export const Adm = StackNavigator({
   Grades: {

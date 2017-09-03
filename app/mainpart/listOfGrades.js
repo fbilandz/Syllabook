@@ -20,7 +20,7 @@ import { List, ListItem, Button } from 'react-native-elements';
 import { Provider, connect } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 import firebase from '../firebase/firebase';
-import { addData, uniqueId } from '../redux/actions';
+import { addData, uniqueId, tokenId, admin } from '../redux/actions';
 import _ from 'lodash';
 
 export class ListOfGrades extends Component {
@@ -44,46 +44,63 @@ export class ListOfGrades extends Component {
 		})*/
 		//this.goToSemesters = this.goToSemesters.bind(this)
 		//this.getData = this.getData.bind(this);
-		this.getUniqueIds = this.getUniqueIds.bind(this);
+		this.getUniqueId = this.getUniqueId.bind(this);
 	}
-	componentWillMount() {
-		this.getUniqueIds(this.props.email);
+	componentDidMount() {
+		this.getUniqueId(this.props.email);
+		this.getToken();
 	}
-	getUniqueIds(email) {
-		const { ok } = this.state;
-		firebase.database()
-			.ref()
-			.child('users')
-			.orderByKey()
-			.once('value', (snapshot) => {
-				console.log(snapshot.val());
-				const x = this.getUniqueId(snapshot.val(), email);
-				this.props.uniqueId(x);
-				this.getDB(x);
-			});
+	getToken() {
+		const { tokenId } = this.props;
+		firebase.messaging().getToken()
+			.then((token) => {
+				console.log('Device FCM Token: ', token);
+				tokenId(token);
 
+			});
 	}
-	getUniqueId(json, email) {
-		for (var i in json) {
-			for (var j in json[i]) {
-				console.log(json[i][j]);
-				if (json[i][j].email === email) return i;
-			}
-		}
-		return false;
+	subscrub() {
+		const { uniqueID } = this.props;
+		console.log(uniqueID.id);
+		firebase.messaging().WILL_PRESENT_RESULT;
+		firebase.messaging().subscribeToTopic(uniqueID.id);
+		firebase.messaging().onMessage((message) => {
+			console.log(message);
+		});
 	}
-	getDB(key) {
+	getUniqueId(email) {
+		console.log(email);
+		fetch('https://us-central1-svercbook.cloudfunctions.net/api/findUniqueId', {
+			method: "POST",
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email
+			}),
+		})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				console.log(responseJson);
+				this.props.uniqueId(responseJson.uniqueId);
+				this.props.admin(responseJson.admin);
+				this.getDB();
+			})
+			.catch((err) => console.error(err));
+	}
+	getDB() {
+		const key = this.props.uniqueID.id;
 		console.log(key)
 		var ref = firebase.database().ref('topics/' + key);
 		ref.on("value", this.handlePostUpdate);
-		this.setState({
-			loaded: true,
-		})
-		console.log(ref);
 	}
 	handlePostUpdate = (snapshot) => {
 		console.log('Post Content', snapshot.val());
 		this.props.addData(snapshot.val());
+		this.setState({
+			loaded: true,
+		})
 	}
 	goToSemesters = (data) => {
 		console.log(data);
@@ -138,5 +155,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
 	addData,
 	uniqueId,
+	tokenId,
+	admin,
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ListOfGrades);

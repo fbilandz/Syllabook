@@ -41,24 +41,24 @@ export class Login extends Component {
       active: false,
       spin: true,
     };
+    this.checkForAuth = this.checkForAuth.bind(this);
   }
-  componentWillMount() {
-    setTimeout(() => this.checkForAuth(), 70);
+  componentDidMount() {
+    setTimeout(this.checkForAuth.bind(this), 75);
   }
   checkForAuth() {
-    console.log(firebase.auth());
     if (firebase.auth().authenticated) {
       this.props.addEmail(firebase.auth().currentUser.email);
       this.goToNormal(firebase.auth().currentUser.email);
-    } else {
-      this.setState({
-        spin: false,
-      })
     }
+    this.setState({
+      spin: false,
+    })
   }
   goToAdmin = (params) => {
     const resetAction = NavigationActions.reset({
       index: 0,
+      key: null,
       actions: [
         NavigationActions.navigate({ routeName: 'Admin', params }),
       ],
@@ -66,10 +66,10 @@ export class Login extends Component {
     this.props.navigation.dispatch(resetAction);
   }
 
-  goToNormal = (params) => {
-    console.log(params)
-    const resetAction = NavigationActions.reset({
+  goToNormal = (params) => {    
+    let resetAction = NavigationActions.reset({
       index: 0,
+      key: null,
       actions: [
         NavigationActions.navigate({ routeName: 'HandleR', params: { email: params } }),
       ],
@@ -97,9 +97,7 @@ export class Login extends Component {
     // this.goToAdmin();
   }
   render() {
-    console.log(firebase.auth());
-    console.log(firebase.auth());
-
+    
     if (this.state.spin) {
       return <ActivityIndicator
         animating={this.state.spin}

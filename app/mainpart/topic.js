@@ -32,7 +32,6 @@ export class TopicList extends Component {
 		};
 		//this.getData = this.getData.bind(this);
 		this.pre = this.pre.bind(this);
-		console.log(this.state.data)
 		//this.pre();
 	}
 	componentDidMount() {
@@ -100,10 +99,12 @@ export class TopicList extends Component {
 			);
 	}*/
 	goToImages = (data) => {
+		
 		this.props.navigation.navigate('Images', { topic: data, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
 	}
 	goToPhoto = (item) => {
-		this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: item.topic, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject, nova: false })
+		console.log(item);
+		this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: item, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject, nova: false })
 	}
 	addATopic = () => {
 		this.props.navigation.navigate('AddATopic', { key: this.props.navigation.state.key, unique_id: this.state.data.unique_id, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject })
@@ -111,11 +112,9 @@ export class TopicList extends Component {
 	render() {
 		const { database } = this.props;
 		const { grade, semester, subject } = this.state.data;
-		console.log(this.props);
 		var x = database[grade][semester][subject];
 		var y = _.keys(database[grade][semester][subject]);
-		console.log(x);
-		if (y.length > 0) {
+		if (y.length > 0 && x.value !== 0) {
 			return (
 				<ScrollView refreshControl={
 					<RefreshControl
@@ -127,14 +126,16 @@ export class TopicList extends Component {
 						<List>
 							{
 								y.map((item, i) => (
-									<View key={i}>
-										<Button onPress={() => this.goToImages(item)}>
-											<View style={{ height: 280, width: 250, borderRadius: 15, alignContent: 'center' }}>
-												<Title>{x[item].title}</Title>
-											</View>
-										</Button>
-										<But buttonStyle={{ height: 25 }} backgroundColor="#34AE4F" onPress={() => this.goToPhoto(item)} title="Add to topic" />
-									</View>
+									item !== "value" ?
+										<View key={i}>
+											<Button onPress={() => this.goToImages(item)}>
+												<View style={{ height: 280, width: 250, borderRadius: 15, alignContent: 'center' }}>
+													<Image source={{ uri: x[item].urls.newID.photo }} style={{ height: 250, width: 250 }} />
+													<Title>{x[item].title}</Title>
+												</View>
+											</Button>
+											<But buttonStyle={{ height: 25 }} backgroundColor="#34AE4F" onPress={() => this.goToPhoto(item)} title="Add to topic" />
+										</View> : null
 								))
 							}
 						</List>

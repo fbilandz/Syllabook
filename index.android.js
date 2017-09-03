@@ -14,7 +14,7 @@ import {
   Image
 } from 'react-native';
 import firebase from './app/firebase/firebase';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import root from './app/redux/reducers';
 import { Root } from './app/handle';
@@ -35,6 +35,8 @@ export default class Syllabook extends Component {
     );
   }
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

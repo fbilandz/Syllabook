@@ -15,6 +15,7 @@ import styles from '../components/style';
 import { List, ListItem } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 import { NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
 
 export class AddASubject extends Component {
 
@@ -34,14 +35,16 @@ export class AddASubject extends Component {
             loaded: true
         })
     }
-    
-    addASubject(){
-        const { unique_id, grade, semester } = this.state.data;
+
+    addASubject() {
+        const { grade, semester } = this.state.data;
         const { text } = this.state;
+        const { uniqueID } = this.props;
         const backAction = NavigationActions.back({
             key: this.state.data.key
         })
-        fetch('http://192.168.35.115:3500/api/subject',
+        console.log(grade, semester, uniqueID.id, text);
+        fetch('https://us-central1-svercbook.cloudfunctions.net/api/createNewSubject',
             {
                 method: 'POST',
                 headers: {
@@ -49,7 +52,7 @@ export class AddASubject extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    'unique_id': unique_id,
+                    'unique': uniqueID.id,
                     'grade': grade,
                     'semester': semester,
                     'subject': text,
@@ -80,3 +83,10 @@ export class AddASubject extends Component {
     }
 }
 AppRegistry.registerComponent('AddASubject', () => AddASubject);
+
+const mapStateToProps = (state, ownProps) => {
+    console.log(state, ownProps);
+    return state;
+}
+
+export default connect(mapStateToProps)(AddASubject);

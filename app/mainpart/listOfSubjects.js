@@ -103,7 +103,7 @@ export class ListOfSubjects extends Component {
 		this.props.navigation.navigate('Topics', { grade: this.state.data.grade, semester: this.state.data.semester, subject: data })
 	}
 	addASubject = () => {
-		this.props.navigation.navigate('AddASubject', { grade: this.state.data.grade, semester: this.state.data.semester, unique_id: this.state.data.unique_id, })
+		this.props.navigation.navigate('AddASubject', { grade: this.state.data.grade, semester: this.state.data.semester, })
 	}
 	renderRow(data, rowId) {
 		console.log(data);
@@ -115,10 +115,10 @@ export class ListOfSubjects extends Component {
 		);
 	}
 	render() {
-        console.log(this.props.database)
-        const { database } = this.props;
-        const x = _.keys(database[this.state.data.grade][this.state.data.semester])
-        console.log(x);
+		console.log(this.props.database)
+		const { database } = this.props;
+		const x = _.keys(database[this.state.data.grade][this.state.data.semester])
+		console.log(x);
 		if (x.length > 0) {
 			return (
 				<ScrollView contentContainerStyle={{ backgroundColor: '#ffffff', minHeight: Dimensions.get('screen').height * 0.8 }}
@@ -134,6 +134,7 @@ export class ListOfSubjects extends Component {
 						<List>
 							{
 								x.map((item, i) => (
+									item !== "value" ?
 									<Button
 										key={i}
 										raised
@@ -143,6 +144,8 @@ export class ListOfSubjects extends Component {
 										onPress={() => this.goToTopics(item)}
 
 									/>
+									:
+									null
 								))
 							}
 							<Button
@@ -177,8 +180,8 @@ export class ListOfSubjects extends Component {
 AppRegistry.registerComponent('ListOfSubjects', () => ListOfSubjects);
 
 const mapStateToProps = (state, ownProps) => {
-    console.log(state, ownProps);;
-    return state;
+	console.log(state, ownProps);;
+	return state;
 }
 const mapDispatchToProps = {
 }
