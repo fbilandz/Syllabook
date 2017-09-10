@@ -92,7 +92,7 @@ export class TopicList extends Component {
     this.props.navigation.navigate('Images', { topic: data, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
   }
   goToTopic = (data) => {
-    this.props.navigation.navigate('Topic', { imageUrl: data.imageUrl, title: data.title });
+    this.props.navigation.navigate('Topic', { topic: data.topic, imageUrl: data.imageUrl, title: data.title, unique_id: this.state.data.unique_id, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
   }
   goToPhoto = (item) => {
     console.log(item);
@@ -117,7 +117,7 @@ export class TopicList extends Component {
             <FeaturedTopic
               title={x[s].title}
               imageUrl={x[s].urls.newID.photo}
-              onPress={() => this.goToTopic({ imageUrl: x[s].urls.newID.photo, title: x[s].title })}
+              onPress={() => this.goToTopic({ imageUrl: x[s].urls.newID.photo, title: x[s].title, topic: s })}
             />
             {
               y.map((item, i) => (
