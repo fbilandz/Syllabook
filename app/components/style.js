@@ -13,6 +13,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     paddingTop: 0,
+    marginTop: 0,
   },
   containeru: {
     flex: 1,

@@ -30,6 +30,7 @@ export class ListOfTopics extends Component {
 		this.state = {
 			data: this.props.data,
 			loaded: false,
+			admin: this.props.admin,
 		};
 		this.getData = this.getData.bind(this);
 	}

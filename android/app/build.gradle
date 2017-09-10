@@ -139,6 +139,7 @@ dependencies {
     }
     compile project(':react-native-uuid-generator')
     compile project(':react-native-vector-icons')
+    compile project(':react-native-linear-gradient')
     compile project(':react-native-share')
     compile project(':react-native-photo-view')
     compile "com.google.firebase:firebase-core:11.0.4"

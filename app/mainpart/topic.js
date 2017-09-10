@@ -1,171 +1,168 @@
 import React, { Component } from 'react';
 import {
-	AppRegistry,
-	StyleSheet,
-	Text,
-	View,
-	Image,
-	Alert,
-	TextInput,
-	TouchableOpacity,
-	Platform,
-	ScrollView,
-	RefreshControl
-} from 'react-native';
-import { Title, NavigationBar, Icon, Button, Spinner, ListView } from '@shoutem/ui';
-import styles from '../components/style';
-import Kartica from '../components/kartica';
-import { List, ListItem } from 'react-native-elements';
-import { Button as But } from 'react-native-elements';
+  ScrollView,
+  ListView,
+  Screen,
+  View,
+  Divider,
+  Title,
+} from '@shoutem/ui';
+import { Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import { NavigationBar } from '@shoutem/ui/navigation';
+import * as _ from 'lodash';
+import { GameStats } from '../components/Stats';
+import { GameBanner } from '../components/Banner';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import {
 
-export class TopicList extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: this.props.navigation.state.params,
-			loaded: false,
-			images: [],
-			refreshing: false,
-			topics: this.props.navigation.state.params.topics,
-		};
-		//this.getData = this.getData.bind(this);
-		this.pre = this.pre.bind(this);
-		//this.pre();
-	}
-	componentDidMount() {
-		this.setState({
-			loaded: true
-		})
-	}
+} from '../redux/actions';
 
-	_onRefresh() {
-		this.setState({
-			refreshing: true
-		})
-		fetch('http://192.168.35.115:3500/api/topics',
-			{
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					'unique_id': this.state.data.unique_id,
-					'semester': this.state.data.semester,
-					'grade': this.state.data.grade,
-					'subject': this.state.data.subject,
-				})
-			})
-			.then((response) => response.json())
-			.then((responseJson) => {
-				console.log(responseJson);
-				this.setState({
-					topics: responseJson,
-					refreshing: false
-				})
-				console.log(this.state);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+export class Topic extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      rating: 0,
+      lastReview: 0
+    };
+    console.log(this.props);
+  }
+  getRating(data) {
+    if (data === null || data === undefined) return 0;
+    let rating = 0;
+    let count = 0;
+    Object.keys(data).map(function (dataKey, index) {
+      rating += data[dataKey].rating;
+      count++;
+    });
+    return rating / (count);
+  }
 
-	}
-	pre() {
-		var images = this.state.images;
-		var data = this.state.data;
-		for (var i = 0; i < data.length; i++) {
-			console.log(data[i])
-			var prefetchImage = Image.prefetch(data[i].photo);
+  insertIntoReducer(data) {
+    const { addReviews, article } = this.props;
+    /*
+    Object.keys(data).map(function (dataKey, index) {
+      addAReview(data[dataKey], dataKey);
+    });*/
+    addReviews(data, article.id);
+  }
+  getReview() {
+    console.log(this.props);
+    const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded, mapReviews, reviews, article } = this.props;
+    reviewsLoading();
+    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        //  selected review are saved in responseJson.selReview
+        this.insertIntoReducer(responseJson);
+        this.setState({
+          loading: false,
+        });
+        reviewsLoaded();
+        this.setState({
+          rating: this.getRating(this.props.reviews[this.props.article.id]),
+          lastReview: this.getLastReview(),
+        });
+        this.mapToMap();
+        //  addFirst(x, this.props.article.id);
+        //  addReviews(this.state.data)
+      })
+      .catch((error) => {
+        reviewsFetchError();
+        console.log(error);
+      });
+  }
 
-			images.push(prefetchImage);
+  getLastReview() {
+    const { reviews, article } = this.props;
+    const last = Object.keys(reviews[article.id])[Object.keys(reviews[article.id]).length - 1];
+    return reviews[article.id][last];
+  }
+  openListScreen(id) {
+    const { navigateTo, article } = this.props;
+    const route = {
+      screen: ext('ReviewListScreen'),
+      title: article.title,
+      props: {
+        article,
+        id,
+        getReviews: this.getReview,
+      },
+    };
+    navigateTo(route);
+  }
 
-			console.log(images);
-		}
-		this.setState({
-			images: images,
-		})
-	}
-	/*renderRow(data, rowId) {
-			console.log(data, rowId);
-			return (
-					<Button onPress={() => Actions.images()}>
-							<View style={{ height: 280, width: 250, borderRadius: 15, alignContent: 'center' }}>
-									<Image source={{ uri: data.photo }} style={{ height: 250, width: 250 }} />
-									<Title>{data.topic}</Title>
-							</View>
-					</Button>
-			);
-	}*/
-	goToImages = (data) => {
-		
-		this.props.navigation.navigate('Images', { topic: data, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
-	}
-	goToPhoto = (item) => {
-		console.log(item);
-		this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: item, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject, nova: false })
-	}
-	addATopic = () => {
-		this.props.navigation.navigate('AddATopic', { key: this.props.navigation.state.key, unique_id: this.state.data.unique_id, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject })
-	}
-	render() {
-		const { database } = this.props;
-		const { grade, semester, subject } = this.state.data;
-		var x = database[grade][semester][subject];
-		var y = _.keys(database[grade][semester][subject]);
-		if (y.length > 0 && x.value !== 0) {
-			return (
-				<ScrollView refreshControl={
-					<RefreshControl
-						refreshing={this.state.refreshing}
-						onRefresh={this._onRefresh.bind(this)}
-					/>}>
-					<View style={styles.containerz}>
-						<But buttonStyle={{ width: 300 }} title="Add a topic" backgroundColor="red" onPress={this.addATopic} />
-						<List>
-							{
-								y.map((item, i) => (
-									item !== "value" ?
-										<View key={i}>
-											<Button onPress={() => this.goToImages(item)}>
-												<View style={{ height: 280, width: 250, borderRadius: 15, alignContent: 'center' }}>
-													<Image source={{ uri: x[item].urls.newID.photo }} style={{ height: 250, width: 250 }} />
-													<Title>{x[item].title}</Title>
-												</View>
-											</Button>
-											<But buttonStyle={{ height: 25 }} backgroundColor="#34AE4F" onPress={() => this.goToPhoto(item)} title="Add to topic" />
-										</View> : null
-								))
-							}
-						</List>
-					</View>
-				</ScrollView>
-			);
-		} else {
-			return (
-				<ScrollView contentContainerStyle={{ height: 600 }}
-					refreshControl={
-						<RefreshControl
-							refreshing={this.state.refreshing}
-							onRefresh={this._onRefresh.bind(this)}
-						/>}>
-					<View style={styles.containerz}>
-						<Text>No available topics</Text>
-						<But buttonStyle={{ width: 300 }} title="Add a topic" backgroundColor="red" onPress={this.addATopic} />
-					</View>
-				</ScrollView>
-			);
-		}
-	}
+  addAReview() {
+    console.log(this.props);
+    const { navigateTo, article } = this.props;
+    const route = {
+      screen: ext('AddAReviewScreen'),
+      props: {
+        id: article.id,
+        onClose: closeModal,
+      },
+    };
+    navigateTo(route);
+  }
+
+  mapToMap() {
+    const { mapReviews, reviews, article, initialReviews } = this.props;
+    console.log(reviews);
+    const newObj = {};
+    let found = true;
+    let i = 0;
+    _.keys(reviews[article.id]).reverse().map(function (dataKey, index) {
+      if (i === 5) found = false;
+      if (found) {
+        newObj[dataKey] = reviews[article.id][dataKey];
+        i++;
+      }
+    });
+    mapReviews(newObj, article.id);
+    initialReviews(newObj, article.id);
+  }
+
+  addAReview(rating) {
+    console.log(this.props);
+    const { navigateTo, article } = this.props;
+    console.log(rating);
+    const route = {
+      screen: ext('AddAReviewScreen'),
+      props: {
+        user: 'Billy',
+        id: article.id,
+        rating,
+      },
+    };
+    navigateTo(route);
+  }
+
+
+  render() {
+    const { imageUrl, title } = this.props.navigation.state.params;
+    return (
+      <Screen styleName="full-screen paper">
+        <ScrollView>
+          <GameBanner articleImage={imageUrl} title={title} />
+          <GameStats lastReview={this.state.lastReview} rating={this.state.rating} />
+          <Divider styleName="line" />
+          <Title styleName="h-center">Reviews</Title>
+
+        </ScrollView>
+      </Screen>
+    );
+  }
 }
-AppRegistry.registerComponent('TopicList', () => TopicList);
+
+const mapDispatchToProps = {
+
+};
 
 const mapStateToProps = (state) => {
-	console.log(state);
-	return state;
-}
+  return {
+    state
+  };
+};
 
-const mapDispatchToProps = {}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopicList);
+export default connect(mapStateToProps, mapDispatchToProps)(Topic);

@@ -4,7 +4,9 @@ import {
 	ADD_EMAIL,
 	UNIQUE_ID,
 	TOKEN_ID,
-	ADMIN
+	ADMIN,
+  ADD_REQUESTS,
+  DONE
 } from './types';
 
 export function addData(data) {
@@ -39,5 +41,19 @@ export function admin(admin) {
 	return {
 		type: ADMIN,
 		admin,
+	}
+}
+
+
+export function addRequest(data) {
+	return {
+		type: ADD_REQUESTS,
+		data,
+	}
+}
+
+export function Done(){
+	return {
+		type: DONE,
 	}
 }

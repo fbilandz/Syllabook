@@ -44,7 +44,7 @@ export class Login extends Component {
     this.checkForAuth = this.checkForAuth.bind(this);
   }
   componentDidMount() {
-    setTimeout(this.checkForAuth.bind(this), 75);
+    setTimeout(this.checkForAuth, 75);
   }
   checkForAuth() {
     if (firebase.auth().authenticated) {
@@ -71,7 +71,7 @@ export class Login extends Component {
       index: 0,
       key: null,
       actions: [
-        NavigationActions.navigate({ routeName: 'HandleR', params: { email: params } }),
+        NavigationActions.navigate({ routeName: 'Admin', params: { email: params } }),
       ],
     });
     this.props.navigation.dispatch(resetAction);

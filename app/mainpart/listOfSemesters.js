@@ -93,7 +93,7 @@ export class ListOfSemesters extends Component {
         const x = _.keys(database[this.state.data.grade]);
         return (
             <View style={styles.containerz}>
-                <List>
+                <List containerStyle={{ marginTop: 0, borderTopWidth: 0, borderBottomWidth: 0, borderRightWidth: 0, borderLeftWidth: 0 }}>
                     {
                         x.map((item, i) => (
                             <Button
