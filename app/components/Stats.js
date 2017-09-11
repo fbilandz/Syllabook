@@ -40,7 +40,7 @@ export class GameStats extends React.PureComponent {
         </View>
         <Divider styleName="line" />
         <Title styleName="h-center">About</Title>
-        <Html body={this.props.body} />
+        <Html body={this.props.description} />
       </View>
     );
   }

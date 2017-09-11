@@ -42,7 +42,6 @@ export class FeaturedTopic extends React.Component {
         {momentDate.fromNow()}
       </Caption>
     ) : null;
-    console.log(imageUrl);
     return (
       <TouchableOpacity onPress={this.onPress}>
         <View styleName="sm-gutter featured" style={{ backgroundColor: '#00802b', top: 0 }}>

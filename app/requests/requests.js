@@ -21,9 +21,8 @@ export class Req extends Component {
     super(props);
   }
   render() {
-    console.log(this.props.requests);
-    let f = this.props.requests;
-    let x = _.keys(this.props.requests);
+    let f = this.props.req;
+    let x = _.keys(this.props.req);
     if (this.props.loading) {
       return <ActivityIndicator size="large" loading={true} />
     }
@@ -40,6 +39,7 @@ export class Req extends Component {
             {
               x.map((item, i) => (
                 <RequestCard
+                  key={i}
                   username={f[item].name}
                   request={f[item].body}
                   title={f[item].title}
@@ -91,8 +91,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state);
-  return state;
+  return { req: state.requests };
 };
 
 const mapDispatchToProps = {

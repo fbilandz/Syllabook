@@ -63,11 +63,8 @@ export class ListOfPhotos extends Component {
 	}
 
 	render() {
-		const { database } = this.props;
-		console.log(database);
-		const { grade, semester, subject, topic } = this.state.d;
-		var x = _.values(database[grade][semester][subject][topic].urls);
-		console.log(x);
+		const urls = this.state.d.topic.urls;
+		var x = _.values(urls);
 		return (
 			<PhotoBrowser
 				onBack={navigator.pop}

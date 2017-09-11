@@ -78,8 +78,6 @@ export class Login extends Component {
   }
 
   send = () => {
-    console.log(this.props);
-
     this.setState({
       loaded: false,
       active: true,
@@ -89,7 +87,7 @@ export class Login extends Component {
     firebase.auth().signInWithEmailAndPassword(email, pass)
       .then((user) => {
         console.log('User successfully logged in', user);
-        this.getUniqueIds(email);
+        this.checkForAuth();
       })
       .catch((err) => {
         console.error('User signin error', err);

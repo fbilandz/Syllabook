@@ -15,22 +15,20 @@ import {
 } from 'react-native';
 import firebase from './app/firebase/firebase';
 import { Provider, connect } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore } from 'redux';
 import root from './app/redux/reducers';
 import { Root } from './app/handle';
-import thunk from 'redux-thunk';
-const store = createStore(root, applyMiddleware(thunk));
+
+const store = createStore(root);
 
 export default class Syllabook extends Component {
   constructor(props) {
     super(props);
-    console.log(store);
   }
   render() {
-    console.log(store.getState());
     return (
       <Provider store={store}>
-        <Root />
+        <Root onNavigationStateChange={null} />
       </Provider>
     );
   }

@@ -51,7 +51,7 @@ export class ListTopic extends React.Component {
             {dateInfo}
           </View>
         </Row>
-        <Divider styleName="line" style={{ backgroundColor: '#565656', color: '#565656', borderColor: '#565656' }} />
+        <Divider styleName="line" style={{ borderColor: '#565656' }} />
       </TouchableOpacity>
     );
   }

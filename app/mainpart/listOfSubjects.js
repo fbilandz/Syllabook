@@ -28,13 +28,8 @@ export class ListOfSubjects extends Component {
     this.state = {
       data: this.props.navigation.state.params,
       loaded: false,
-      subjects: this.props.navigation.state.params.subjects,
       refreshing: false,
     };
-    //this.getData = this.getData.bind(this);
-    this.initialStart = this.initialStart.bind(this);
-    //this.initialStart();
-    console.log(this.state.data);
   }
   componentDidMount() {
     console.log("subjects")
@@ -42,91 +37,18 @@ export class ListOfSubjects extends Component {
       loaded: true
     })
   }
-  initialStart() {
-    fetch('http://192.168.35.115:3500/api/subjects',
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          'unique_id': this.state.data.unique_id,
-          'semester': this.state.data.semester,
-          'grade': this.state.data.grade,
-        })
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          subjects: responseJson.subjects,
-          //refreshing: false,
-        })
-        console.log(this.state);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  }
-  _onRefresh() {
-    this.setState({
-      refreshing: true,
-    })
-    fetch('http://192.168.35.115:3500/api/subjects',
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          'unique_id': this.state.data.unique_id,
-          'semester': this.state.data.semester,
-          'grade': this.state.data.grade,
-        })
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          subjects: responseJson.subjects,
-          refreshing: false,
-        })
-        console.log(this.state);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  }
   goToTopics = (data) => {
     this.props.navigation.navigate('Topics', { grade: this.state.data.grade, semester: this.state.data.semester, subject: data })
   }
   addASubject = () => {
     this.props.navigation.navigate('AddASubject', { grade: this.state.data.grade, semester: this.state.data.semester, })
   }
-  renderRow(data, rowId) {
-    console.log(data);
-    return (
-      <View style={styles.card}>
-        <Button onPress={() => this.goToTopics(data.topics)}><Text style={styles.textz}>{data.subject}</Text></Button>
-      </View>
-
-    );
-  }
   render() {
-    console.log(this.props.database)
     const { database } = this.props;
     const x = _.keys(database[this.state.data.grade][this.state.data.semester])
-    console.log(x);
     if (x.length > 0) {
       return (
         <ScrollView contentContainerStyle={{ backgroundColor: '#ffffff', minHeight: Dimensions.get('screen').height * 0.8 }}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh.bind(this)}
-            />}
         >
           <View style={styles.containerz}>
             <List containerStyle={{ marginTop: 0, borderTopWidth: 0, borderBottomWidth: 0, borderRightWidth: 0, borderLeftWidth: 0 }}>
@@ -160,12 +82,7 @@ export class ListOfSubjects extends Component {
       );
     } else {
       return (
-        <ScrollView contentContainerStyle={{ backgroundColor: '#ffffff', minHeight: Dimensions.get('screen').height * 0.8 }}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh.bind(this)}
-            />} >
+        <ScrollView contentContainerStyle={{ backgroundColor: '#ffffff', minHeight: Dimensions.get('screen').height * 0.8 }}>
           <View style={styles.containerz}>
             <Text>No available subjects</Text>
             <Button buttonStyle={{ width: 300 }} title="Add a subject" backgroundColor="red" onPress={this.addASubject} />
@@ -178,8 +95,7 @@ export class ListOfSubjects extends Component {
 AppRegistry.registerComponent('ListOfSubjects', () => ListOfSubjects);
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state, ownProps);;
-  return state;
+  return { database: state.database };
 }
 const mapDispatchToProps = {
 }

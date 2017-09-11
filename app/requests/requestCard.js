@@ -5,8 +5,6 @@ import { Icon } from 'react-native-elements';
 export class RequestCard extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
-    console.log(this.props);
     this.delete = this.delete.bind(this);
   }
   delete = (id) => {

@@ -44,44 +44,9 @@ export class TopicList extends Component {
     this.setState({
       loaded: true
     });
-    console.log(this.state.admin);
-  }
-
-  _onRefresh() {
-    this.setState({
-      refreshing: true
-    })
-    fetch('http://192.168.35.115:3500/api/topics',
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          'unique_id': this.state.data.unique_id,
-          'semester': this.state.data.semester,
-          'grade': this.state.data.grade,
-          'subject': this.state.data.subject,
-        })
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          topics: responseJson,
-          refreshing: false
-        })
-        console.log(this.state);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
   }
 
   deleteTopic = (topic) => {
-    console.log(topic);
     const { uniqueID } = this.props;
     const { unique_id, grade, subject, semester } = this.state.data;
     firebase.database()
@@ -95,7 +60,6 @@ export class TopicList extends Component {
     this.props.navigation.navigate('Topic', { topic: data.topic, imageUrl: data.imageUrl, title: data.title, unique_id: this.state.data.unique_id, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
   }
   goToPhoto = (item) => {
-    console.log(item);
     this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: item, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject, nova: false })
   }
   addATopic = () => {
@@ -108,9 +72,9 @@ export class TopicList extends Component {
     var y = _.keys(database[grade][semester][subject]);
     var width = Dimensions.get("window").width;
     if (y.length > 0 && x.value !== 0) {
-      _.remove(y, function (n) { return n === "value" })
+      var index = y.indexOf("value");
+      y.splice(index, 1)
       var s = y.shift();
-      console.log(y, s)
       return (
         <ScrollView contentContainerStyle={{ top: 0, }}>
           <List containerStyle={{ marginTop: 0, borderTopWidth: 0, borderBottomWidth: 0 }}>
@@ -126,6 +90,7 @@ export class TopicList extends Component {
                     key={i}
                     imageUrl={x[item].urls.newID.photo}
                     title={x[item].title}
+                    onPress={() => this.goToTopic({ imageUrl: x[s].urls.newID.photo, title: x[s].title, topic: s })}
                   />
                   : null
               ))
@@ -135,12 +100,7 @@ export class TopicList extends Component {
       );
     } else {
       return (
-        <ScrollView contentContainerStyle={{ height: 600 }}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh.bind(this)}
-            />}>
+        <ScrollView contentContainerStyle={{ height: 600 }}>
           <View style={styles.containerz}>
             <Text>No available topics</Text>
             <But buttonStyle={{ width: 300 }} title="Add a topic" backgroundColor="red" onPress={this.addATopic} />
@@ -153,7 +113,6 @@ export class TopicList extends Component {
 AppRegistry.registerComponent('TopicList', () => TopicList);
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return state;
 }
 
