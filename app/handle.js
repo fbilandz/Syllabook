@@ -137,7 +137,7 @@ export const Tabs = TabNavigator({
 });
 
 
-export const Root = StackNavigator({
+const Root = StackNavigator({
   Tabs: {
     screen: Tabs,
   },
@@ -151,3 +151,5 @@ export const Root = StackNavigator({
     headerMode: 'none',
   }
 );
+
+export default Root;
