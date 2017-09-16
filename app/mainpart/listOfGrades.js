@@ -29,22 +29,11 @@ export class ListOfGrades extends Component {
     super(props);
     console.log(this.props)
     this.state = {
-      //data: this.props.screenProps,
       loaded: false,
       ok: false,
     }
     console.log("svasta");
     console.log(this.props.navigation.state.params);
-		/*let data = this.state.data;
-		for(var i = 0; i<data.length; i++){
-				console.log(data[i]);
-				data[i].props = this.props
-		}
-		this.setState({
-				data: data,
-		})*/
-    //this.goToSemesters = this.goToSemesters.bind(this)
-    //this.getData = this.getData.bind(this);
     this.getUniqueId = this.getUniqueId.bind(this);
   }
   componentDidMount() {
@@ -136,7 +125,6 @@ export class ListOfGrades extends Component {
             {
               x.map((item, i) => (
                 <Button
-                  raised
                   key={i}
                   buttonStyle={{ width: 320, marginVertical: 15, }}
                   title={item}

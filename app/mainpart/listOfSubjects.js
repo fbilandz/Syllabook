@@ -57,19 +57,16 @@ export class ListOfSubjects extends Component {
                   item !== "value" ?
                     <Button
                       key={i}
-                      raised
                       buttonStyle={{ width: 320, marginVertical: 15, }}
                       title={item}
                       backgroundColor="#34AE4F"
                       onPress={() => this.goToTopics(item)}
-
                     />
                     :
                     null
                 ))
               }
               <Button
-                raised
                 buttonStyle={{ width: 320, marginVertical: 15, }}
                 title="Add a subject"
                 backgroundColor="red"

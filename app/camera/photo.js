@@ -29,9 +29,7 @@ export class Photo extends Component {
       taken: false,
       data: this.props.navigation.state.params,
     }
-
-
-    console.log(this.state.data);
+    
   }
   takePicture() {
     this.camera.capture()

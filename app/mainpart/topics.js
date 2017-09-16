@@ -90,7 +90,7 @@ export class TopicList extends Component {
                     key={i}
                     imageUrl={x[item].urls.newID.photo}
                     title={x[item].title}
-                    onPress={() => this.goToTopic({ imageUrl: x[s].urls.newID.photo, title: x[s].title, topic: s })}
+                    onPress={() => this.goToTopic({ imageUrl: x[item].urls.newID.photo, title: x[item].title, topic: item })}
                   />
                   : null
               ))

@@ -18,6 +18,8 @@ import Login from './auth/login';
 import { Images } from './mainpart/im';
 import Req from './requests/requests';
 import Topic from './mainpart/topic';
+import RateScreen from './mainpart/RateScreen';
+import AddACommentScreen from './mainpart/addAComment';
 import AddButton from './components/addButton';
 
 export const Handle = StackNavigator({
@@ -77,6 +79,18 @@ export const Handle = StackNavigator({
       title: "Topic",
     }
   },
+  RateScreen: {
+    screen: RateScreen,
+    navigationOptions: {
+      title: "Rate it",
+    }
+  },
+  AddACommentScreen: {
+    screen: AddACommentScreen,
+    navigationOptions: {
+      title: "Leave a Comment",
+    }
+  }
 }, {
     initialRouteName: 'Grades',
     cardStyle: {

@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 import { GameStats } from '../components/Stats';
 import { GameBanner } from '../components/Banner';
 import { Comment } from '../components/comment';
+import firebase from '../firebase/firebase';
 import { connect } from 'react-redux';
 import {
 
@@ -50,18 +51,11 @@ export class Topic extends Component {
   }
 
   addAReview() {
-    const { navigateTo, article } = this.props;
-    const route = {
-      screen: ext('AddAReviewScreen'),
-      props: {
-        id: article.id,
-        onClose: closeModal,
-      },
-    };
-    navigateTo(route);
+    this.props.navigation.navigate('RateScreen', { topic: this.state.topic, grade: this.state.grade, semester: this.state.semester, subject: this.state.subject, key: this.props.navigation.state.key });
   }
   goToPhoto = (item) => {
-    this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: item, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject, nova: false })
+    console.log(item);
+    this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: this.state.topic, grade: this.state.grade, semester: this.state.semester, subject: this.state.subject, nova: false })
   }
   goToImages = (data) => {
     this.props.navigation.navigate('Images', { topic: data, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
@@ -81,11 +75,12 @@ export class Topic extends Component {
             <Button raised backgroundColor="green" title="See all" iconRight icon={{ name: 'ios-arrow-forward-outline', type: 'ionicon' }} onPress={() => this.goToImages(data)} buttonStyle={{ width: width * 0.4 }} />
           </View>
           <Divider styleName="line" style={{ marginBottom: 5 }} />
+          <Button backgroundColor="green" title="Rate and Comment" buttonStyle={{ marginVertical: 10 }} iconRight icon={{ name: 'rate-review', type: 'material' }} onPress={() => this.addAReview()} />
           <Title styleName="h-center">Comments</Title>
           <List>
             {
               x === 0 ? <Text>No comments yet</Text> : x.map((item, i) => (
-                item !== 1 ? <Comment
+                item !== 1 || i > 5 ? <Comment
                   key={i}
                   data={item}
                 /> : null
