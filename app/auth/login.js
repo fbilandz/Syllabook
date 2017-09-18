@@ -44,7 +44,7 @@ export class Login extends Component {
     this.checkForAuth = this.checkForAuth.bind(this);
   }
   componentDidMount() {
-    setTimeout(this.checkForAuth, 75);
+    setTimeout(this.checkForAuth, 35);
   }
   checkForAuth() {
     if (firebase.auth().authenticated) {
@@ -54,16 +54,6 @@ export class Login extends Component {
     this.setState({
       spin: false,
     })
-  }
-  goToAdmin = (params) => {
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Admin', params }),
-      ],
-    });
-    this.props.navigation.dispatch(resetAction);
   }
 
   goToNormal = (params) => {    
@@ -136,19 +126,10 @@ export class Login extends Component {
               title="Login"
               active={this.state.active}
             />
-            <TouchableHighlight onPress={() => this.setState({ login: false, register: true })} >
-              <Text style={{ color: 'blue', marginVertical: 15 }}>Register</Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => this.setState({ login: false, create: true })} >
-              <Text style={{ color: 'blue', marginVertical: 15 }}>Create New Group</Text>
-            </TouchableHighlight>
           </View>
         );
       }
-      else if (this.state.register) {
-        return <Register />;
-      }
-      return <CreateNewGroup />;
+      
     }
   }
 

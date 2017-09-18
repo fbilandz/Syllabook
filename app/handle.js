@@ -13,7 +13,7 @@ import Photo from './camera/photo';
 import { AddATopic } from './mainpart/addATopic';
 import AddASubject from './mainpart/addASubject';
 // import { CreateNewGroup } from './auth/createNewGroup';
-import { Register } from './auth/register';
+import Register from './auth/register';
 import Login from './auth/login';
 import { Images } from './mainpart/im';
 import Req from './requests/requests';
@@ -119,6 +119,7 @@ export const Admin = TabNavigator({
   }
 }, {
     tabBarPosition: 'bottom',
+    swipeEnabled: false,
     tabBarOptions: {
       inactiveBackgroundColor: "#4CBD72",
       tabStyle: {

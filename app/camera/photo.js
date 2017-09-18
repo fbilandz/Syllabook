@@ -71,9 +71,16 @@ export class Photo extends Component {
                 title: topic,
                 author: "NOIDEA",
                 timestamp: moment(),
+                rating: 0,
+                comments: {
+                  value: 0,
+                },
                 urls: {
                   newID: {
                     photo: l,
+                    source: {
+                      uri: l,
+                    }
                   }
                 }
               },
@@ -87,7 +94,10 @@ export class Photo extends Component {
             const { topic } = this.state.data;
             firebase.database().ref(`topics/${uniqueID.id}/${grade}/${semester}/${subject}/${topic}/urls`)
               .push({
-                photo: l
+                source: {
+                  uri: l
+                }
+                
               },
               (err) => {
                 console.log(err);

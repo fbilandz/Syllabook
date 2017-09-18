@@ -18,6 +18,9 @@ import { Button } from 'react-native-elements';
 import { Login } from './login';
 import { CreateNewGroup } from './createNewGroup';
 import firebase from '../firebase/firebase';
+import { addEmail } from '../redux/actions';
+import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 export class SorT extends Component {
   static propTypes = {
@@ -88,6 +91,16 @@ export class Register extends Component {
       }
     });
   }
+  goToNormal = (params) => {
+    let resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Admin', params: { email: params } }),
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);
+  }
   send() {
     if (this.check()) {
       this.setState({
@@ -99,6 +112,8 @@ export class Register extends Component {
           console.log('user created', user);
           this.setState({ loaded: true });
           this.addUserToDB(unique_id, email);
+          this.props.addEmail(firebase.auth().currentUser.email);
+          this.goToNormal(firebase.auth().currentUser.email);
         })
         .catch((err) => {
           console.error('An error occurred', err);
@@ -107,60 +122,58 @@ export class Register extends Component {
   }
 
   render() {
-    if (this.state.register) {
-      return (
-        <View style={styles.container}>
+    return (
+      <View style={styles.container}>
 
-          <View style={styles.textInputContainer}>
-            <TextInput
-              editable
-              maxLength={32}
-              placeholder="email"
-              style={styles.textinput}
-              keyboardType="email-address"
-              onChangeText={(email) => { this.setState({ email }); }}
-              autoCapitalize="none" />
-            <Text>{this.state.pl}</Text>
-            <TextInput
-              editable
-              maxLength={16}
-              placeholder="password"
-              style={styles.textinput}
-              secureTextEntry
-              onChangeText={(pass) => { this.setState({ pass }); }}
-              autoCapitalize="none"
-            />
-            <Text>{this.state.pl}</Text>
-            <TextInput
-              editable
-              maxLength={16}
-              placeholder="confirm password"
-              style={styles.textinput}
-              secureTextEntry
-              onChangeText={(passs) => { this.setState({ passs }); }}
-              autoCapitalize="none" />
-            <TextInput
-              editable
-              maxLength={32}
-              placeholder="unique id"
-              style={styles.textinput}
-              onChangeText={(unique_id) => { this.setState({ unique_id }); }}
-              autoCapitalize="none"
-            />
-          </View>
-          <Button onPress={this.send.bind(this)} title="Register" buttonStyle={{ width: 230, backgroundColor: 'green' }} />
-          <TouchableHighlight onPress={() => this.setState({ register: false, login: true })}><Text style={{ color: 'blue', marginVertical: 15 }}>Login</Text></TouchableHighlight>
-          <TouchableHighlight onPress={() => this.setState({ register: false, create: true })} ><Text style={{ color: 'blue', marginVertical: 15 }}>Create New Group</Text></TouchableHighlight>
+        <View style={styles.textInputContainer}>
+          <TextInput
+            editable
+            maxLength={32}
+            placeholder="email"
+            style={styles.textinput}
+            keyboardType="email-address"
+            onChangeText={(email) => { this.setState({ email }); }}
+            autoCapitalize="none" />
+          <Text>{this.state.pl}</Text>
+          <TextInput
+            editable
+            maxLength={16}
+            placeholder="password"
+            style={styles.textinput}
+            secureTextEntry
+            onChangeText={(pass) => { this.setState({ pass }); }}
+            autoCapitalize="none"
+          />
+          <Text>{this.state.pl}</Text>
+          <TextInput
+            editable
+            maxLength={16}
+            placeholder="confirm password"
+            style={styles.textinput}
+            secureTextEntry
+            onChangeText={(passs) => { this.setState({ passs }); }}
+            autoCapitalize="none" />
+          <TextInput
+            editable
+            maxLength={32}
+            placeholder="unique id"
+            style={styles.textinput}
+            onChangeText={(unique_id) => { this.setState({ unique_id }); }}
+            autoCapitalize="none"
+          />
         </View>
+        <Button onPress={this.send.bind(this)} title="Register" buttonStyle={{ width: 230, backgroundColor: 'green' }} />
+      </View>
 
-      );
-    }
-    else if (this.state.login) {
-      return <Login />;
-    }
-    return <CreateNewGroup />;
+    );
+
   }
 }
 
+mapDispatchToProps = {
+  addEmail,
+}
 
 AppRegistry.registerComponent('Register', () => Register);
+
+export default connect(null, mapDispatchToProps)(Register);

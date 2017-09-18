@@ -17,6 +17,7 @@ export class AddButton extends React.Component {
         color="#fff"
         onPress={() => this.navigate()}
         backgroundColor="#00802b"
+        size={30}
       />
     );
   }
