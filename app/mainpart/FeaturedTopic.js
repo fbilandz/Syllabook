@@ -7,10 +7,11 @@ import {
   Tile,
   Image,
   Divider,
+  Subtitle,
 } from '@shoutem/ui';
 
 import moment from 'moment';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 /**
  * A component used to render featured news articles
  */
@@ -53,6 +54,14 @@ export class FeaturedTopic extends React.Component {
               <Title>{(title || '').toUpperCase()}</Title>
               <View styleName="horizontal md-gutter-top" virtual>
                 <Caption styleName="collapsible" numberOfLines={1}>{author}</Caption>
+                <View style={{ flexDirection: 'row' }}>
+                  <Subtitle>{this.props.rating === undefined ? 0.0 : this.props.rating.toFixed(1)} </Subtitle>
+                  <Icon
+                    name="star"
+                    size={15}
+                    color={'green'}
+                  />
+                </View>
                 {dateInfo}
               </View>
             </Tile>

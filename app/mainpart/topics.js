@@ -29,30 +29,21 @@ export class TopicList extends Component {
     super(props);
     this.state = {
       data: this.props.navigation.state.params,
-      loaded: false,
-      images: [],
-      refreshing: false,
       topics: this.props.navigation.state.params.topics,
       admin: this.props.uniqueID.admin,
     };
     //this.getData = this.getData.bind(this);
     //this.pre();
-    this.deleteTopic = this.deleteTopic.bind(this);
+    // this.deleteTopic = this.deleteTopic.bind(this);
     this.goToTopic = this.goToTopic.bind(this);
   }
-  componentDidMount() {
-    this.setState({
-      loaded: true
-    });
-  }
-
-  deleteTopic = (topic) => {
+  /* deleteTopic = (topic) => {
     const { uniqueID } = this.props;
     const { unique_id, grade, subject, semester } = this.state.data;
     firebase.database()
       .ref(`topics/${uniqueID.id}/${grade}/${semester}/${subject}/${topic}`)
       .remove((err) => console.log(err));
-  }
+  } */
   goToImages = (data) => {
     this.props.navigation.navigate('Images', { topic: data, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
   }
@@ -79,8 +70,10 @@ export class TopicList extends Component {
         <ScrollView contentContainerStyle={{ top: 0, }}>
           <List containerStyle={{ marginTop: 0, borderTopWidth: 0, borderBottomWidth: 0 }}>
             <FeaturedTopic
+              rating={x[s].rating}
               title={x[s].title}
               imageUrl={x[s].urls.newID.photo}
+              date={x[s].timestamp}
               onPress={() => this.goToTopic({ imageUrl: x[s].urls.newID.photo, title: x[s].title, topic: s })}
             />
             {
@@ -90,6 +83,8 @@ export class TopicList extends Component {
                     key={i}
                     imageUrl={x[item].urls.newID.photo}
                     title={x[item].title}
+                    rating={x[item].rating}
+                    date={x[item].timestamp}
                     onPress={() => this.goToTopic({ imageUrl: x[item].urls.newID.photo, title: x[item].title, topic: item })}
                   />
                   : null
@@ -112,7 +107,8 @@ export class TopicList extends Component {
 }
 AppRegistry.registerComponent('TopicList', () => TopicList);
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  console.log(ownProps);
   return state;
 }
 

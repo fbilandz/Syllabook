@@ -27,13 +27,13 @@ export class GameStats extends React.PureComponent {
           </View>
 
           <View styleName="md-gutter-right">
-            <Title>Last review : </Title>
+            <Title>Last comment : </Title>
             <Subtitle>
               {
                 this.props.lastReview === undefined ?
                   null
                   :
-                  moment(this.props.lastReview.timeStamp).fromNow()
+                  moment(this.props.lastReview).fromNow()
               }
             </Subtitle>
           </View>

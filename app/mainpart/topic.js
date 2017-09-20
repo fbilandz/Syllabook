@@ -16,9 +16,7 @@ import { GameBanner } from '../components/Banner';
 import { Comment } from '../components/comment';
 import firebase from '../firebase/firebase';
 import { connect } from 'react-redux';
-import {
-
-} from '../redux/actions';
+import { Delete } from '../components/delete';
 
 export class Topic extends Component {
   constructor(props) {
@@ -49,7 +47,13 @@ export class Topic extends Component {
     };
     navigateTo(route);
   }
-
+  deleteTopic = (topic) => {
+    const { uniqueID } = this.props;
+    const { unique_id, grade, subject, semester } = this.state.data;
+    firebase.database()
+      .ref(`topics/${uniqueID.id}/${grade}/${semester}/${subject}/${topic}`)
+      .remove((err) => console.log(err));
+  }
   addAReview() {
     this.props.navigation.navigate('RateScreen', { topic: this.state.topic, grade: this.state.grade, semester: this.state.semester, subject: this.state.subject, key: this.props.navigation.state.key });
   }
@@ -68,7 +72,7 @@ export class Topic extends Component {
     return (
       <Screen styleName="full-screen paper">
         <ScrollView>
-          <GameBanner articleImage={imageUrl} title={title} newsAuthor={data.author} />
+          <GameBanner articleImage={imageUrl} title={title} newsAuthor={data.author} timeUpdated={data.timestamp} />
           <GameStats lastReview={data.timestamp} rating={data.rating} description={data.description} />
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 5 }}>
             <Button raised backgroundColor="#E3AD2B" title="Add to topic" iconRight icon={{ name: 'plus', type: 'octicon' }} buttonStyle={{ width: width * 0.4 }} onPress={() => this.goToPhoto(data)} />
@@ -87,6 +91,7 @@ export class Topic extends Component {
               ))
             }
           </List>
+          {this.props.uniqueID.admin && <Delete onPress={this.deleteTopic} />}
         </ScrollView>
       </Screen>
     );

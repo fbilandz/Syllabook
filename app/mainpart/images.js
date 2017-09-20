@@ -23,25 +23,7 @@ export class ListOfPhotos extends Component {
     super(props);
     this.state = {
       d: this.props.navigation.state.params,
-      data: {
-        title: 'Multiple photos',
-        description: 'with captions and nav arrows',
-        displayNavArrows: true,
-        displayActionButton: true,
-        media: [{
-          photo: 'https://c1.staticflickr.com/5/4195/34869630555_3f8554b403.jpg',
-          selected: true,
-          caption: 'Grotto of the Madonna',
-        }, {
-          photo: 'http://192.168.1.4:3500/uploads/AZEMRHUZ82Y0O4S5.jpg',
-          thumb: 'http://192.168.1.4:3500/uploads/AZEMRHUZ82Y0O4S5.jpg',
-          selected: false,
-          caption: 'Beautiful Eyes',
-        }],
-
-      }
     }
-    console.log(this.state.d);
     this._onSelectionChanged = this._onSelectionChanged.bind(this);
     this._onActionButton = this._onActionButton.bind(this);
 

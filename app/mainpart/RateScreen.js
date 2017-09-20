@@ -71,6 +71,7 @@ export class RateScreen extends Component {
           rating={this.state.rating}
           selectedStar={(rate) => this.setState({ rating: rate })}
           maxStars={5}
+          starColor="green"
         />
         <Button buttonStyle={{ width: 320, marginVertical: 15 }} backgroundColor="#E3AD2B" title="Just rate it" onPress={() => this.justRateIt()} iconRight icon={{ name: 'hand-o-up', type: 'font-awesome' }} />
         <Button buttonStyle={{ width: 320, }} backgroundColor="green" title="Leave a comment" onPress={() => this.commentIt()} iconRight icon={{ name: 'comment', type: 'material' }} />

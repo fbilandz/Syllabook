@@ -33,43 +33,6 @@ export class AddATopic extends Component {
       loaded: true
     })
   }
-
-  getData() {
-    const { unique_id, grade, semester } = this.state.data;
-    const { text } = this.state;
-    if (this.state.loaded) {
-      this.setState({
-        loaded: false,
-      })
-    }
-    fetch('http://192.168.35.115:3500/grades',
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          'unique_id': unique_id,
-          'grade': grade,
-          'semester': semester,
-          'subject': text,
-        })
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          loaded: true,
-          data: responseJson.data,
-        })
-        console.log(this.state);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-  }
   goToPhoto = () => {
     this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: this.state.text, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject, nova: true, key: this.props.navigation.state.key })
   }

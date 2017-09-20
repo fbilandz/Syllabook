@@ -24,19 +24,11 @@ import _ from 'lodash';
 export class ListOfSubjects extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
     this.state = {
       data: this.props.navigation.state.params,
-      loaded: false,
-      refreshing: false,
     };
   }
-  componentDidMount() {
-    console.log("subjects")
-    this.setState({
-      loaded: true
-    })
-  }
+  
   goToTopics = (data) => {
     this.props.navigation.navigate('Topics', { grade: this.state.data.grade, semester: this.state.data.semester, subject: data })
   }

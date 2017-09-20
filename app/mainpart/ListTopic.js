@@ -9,7 +9,7 @@ import {
   Row,
   Divider,
 } from '@shoutem/ui';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 /**
  * A component used to render a single list article item
  */
@@ -48,6 +48,14 @@ export class ListTopic extends React.Component {
           />
           <View styleName="vertical stretch space-between">
             <Subtitle numberOfLines={2}>{title}</Subtitle>
+            <View style={{ flexDirection: 'row' }}>
+              <Subtitle>{this.props.rating === undefined ? 0.0 : this.props.rating.toFixed(1)} </Subtitle>
+              <Icon
+                name="star"
+                size={15}
+                color={'green'}
+              />
+            </View>
             {dateInfo}
           </View>
         </Row>

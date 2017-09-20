@@ -27,13 +27,10 @@ import _ from 'lodash';
 export class ListOfGrades extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props)
     this.state = {
       loaded: false,
       ok: false,
     }
-    console.log("svasta");
-    console.log(this.props.navigation.state.params);
     this.getUniqueId = this.getUniqueId.bind(this);
   }
   componentDidMount() {
@@ -51,16 +48,13 @@ export class ListOfGrades extends Component {
   }
   subscrub() {
     const { uniqueID } = this.props;
-    console.log(uniqueID.id);
     firebase.messaging().WILL_PRESENT_RESULT;
     firebase.messaging().subscribeToTopic(uniqueID.id);
     firebase.messaging().onMessage((message) => {
-      console.log(message);
       firebase.messaging().createLocalNotification({ body: message.body });
     });
   }
   getUniqueId(email) {
-    console.log(email);
     fetch('https://us-central1-svercbook.cloudfunctions.net/api/findUniqueId', {
       method: "POST",
       headers: {
@@ -73,7 +67,6 @@ export class ListOfGrades extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         this.props.uniqueId(responseJson.uniqueId);
         this.props.admin(responseJson.admin);
         this.getDB();
@@ -83,7 +76,6 @@ export class ListOfGrades extends Component {
   }
   getDB() {
     const key = this.props.uniqueID.id;
-    console.log(key)
     var ref = firebase.database().ref('topics/' + key);
     ref.on("value", this.handlePostUpdate);
     firebase.database()
@@ -91,19 +83,16 @@ export class ListOfGrades extends Component {
       .on("value", this.handleRequests)
   }
   handlePostUpdate = (snapshot) => {
-    console.log('Post Content', snapshot.val());
     this.props.addData(snapshot.val());
     this.setState({
       loaded: true,
     })
   }
   handleRequests = (snapshot) => {
-    console.log('Post Content', snapshot.val());
     this.props.addRequest(snapshot.val());
     this.props.Done();
   }
   goToSemesters = (data) => {
-    console.log(data);
     this.props.navigation.navigate('Semesters', { grade: data });
   }
 	/*renderRow(data) {
@@ -117,7 +106,6 @@ export class ListOfGrades extends Component {
   render() {
     const { database } = this.props;
     let x = _.keys(database);
-    console.log(x);
     if (x.length > 0 || !this.state.loaded)
       return (
         <View style={styles.containerz}>

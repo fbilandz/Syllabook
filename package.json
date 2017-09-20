@@ -10,6 +10,7 @@
     "@shoutem/core": "0.0.50",
     "@shoutem/redux-io": "^2.3.0",
     "@shoutem/ui": "^0.21.3",
+    "babel-plugin-transform-remove-console": "^6.8.5",
     "lodash": "^4.17.4",
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.4",
