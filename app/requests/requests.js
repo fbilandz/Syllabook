@@ -21,28 +21,29 @@ export class Req extends Component {
     super(props);
   }
   render() {
-    let f = this.props.req;
-    let x = _.keys(this.props.req);
+    const { req } = this.props;
+    const x = _.keys(req);
     if (this.props.loading) {
       return <ActivityIndicator size="large" loading={true} />
     }
     return (
-      <ScrollView contentContainerStyle={{ backgroundColor: '#ffffff', minHeight: Dimensions.get("window").height }}>
-        <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ backgroundColor: '#BFECCF', minHeight: Dimensions.get("window").height }}>
+        <View style={[styles.container, { backgroundColor: '#BFECCF', }]}>
           <List>
             {
               x.map((item, i) => (
                 <RequestCard
                   key={i}
-                  username={f[item].name}
-                  request={f[item].body}
-                  title={f[item].title}
-                  admin
+                  reqID={item}
+                  username={req[item].name}
+                  request={req[item].body}
+                  title={req[item].title}
+                  admin={this.props.uniqueID.admin}
+                  id={this.props.uniqueID.id}
                 />
               ))
             }
           </List>
-
         </View>
       </ScrollView>
     );
@@ -84,8 +85,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state, ownProps) => {
-  return { req: state.requests };
+const mapStateToProps = (state) => {
+  return { req: state.requests, uniqueID: state.uniqueID };
 };
 
 const mapDispatchToProps = {

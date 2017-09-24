@@ -58,7 +58,6 @@ const requests = (state = {}, action) => {
   switch (action.type) {
     case ADD_REQUESTS:
       return {
-        ...state,
         ...action.data,
       };
     default:
