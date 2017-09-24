@@ -48,7 +48,7 @@ export class FeaturedTopic extends React.Component {
         <View styleName="sm-gutter featured" style={{ backgroundColor: '#00802b', top: 0 }}>
           <Image
             styleName="featured placeholder"
-            source={{ uri: imageUrl }}
+            source={{ uri: imageUrl+'=s200' }}
           >
             <Tile>
               <Title>{(title || '').toUpperCase()}</Title>

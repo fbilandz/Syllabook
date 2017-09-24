@@ -1,7 +1,6 @@
 import React, {
   Component,
 } from 'react';
-
 import {
   Text,
   TextInput,
@@ -17,50 +16,43 @@ import _ from 'lodash';
 import moment from 'moment';
 import { NavigationActions } from 'react-navigation';
 
-export class AddACommentScreen extends Component {
+export class CreateNewRequest extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
     this.state = {
-      review: '',
-      rating: props.rating || 0,
+      request: '',
+      title: '',
       props,
     };
-    this.rateIt = this.rateIt.bind(this);
+    this.submitRequest = this.submitRequest.bind(this);
   }
   componentWillMount() {
-    if (this.state.props.review) {
+    if (this.state.props.request) {
       this.setState({
-        review: this.state.props.review,
+        request: this.state.props.request,
       });
     }
   }
-  rateIt() {
-    const { review } = this.state;
-    if (review.length === 0) {
-      Alert.alert("Comment can't be empty", "Write something or go back and just rate it");
+  submitRequest() {
+    const { request, title } = this.state;
+    if (title.length === 0) {
+      Alert.alert("Title can't be empty", "Name it");
       return;
     }
-    const { topic, grade, subject, semester, key, rating } = this.props.navigation.state.params;
+    if (request.length === 0) {
+      Alert.alert("Request can't be empty", "Explain your request");
+      return;
+    }
     const { id, name } = this.props.uniqueID;
-    firebase.database().ref(`ratings/${id}/${grade}/${semester}/${subject}/${topic}`)
+    firebase.database().ref(`requests/${id}/`)
       .push({
-        name: this.props.email,
-        rating,
-      });
-    firebase.database().ref(`topics/${id}/${grade}/${semester}/${subject}/${topic}/comments`)
-      .push({
-        user: name,
-        rating,
-        comment: review,
+        name,
+        body: request,
+        title,
         timestamp: moment(),
       })
-    firebase.database().ref(`topics/${id}/${grade}/${semester}/${subject}/${topic}/comments`)
-      .update({
-        "value": 1,
-      })
     const backAction = NavigationActions.back({
-      key: key
+      key: this.props.navigation.state.key
     })
     this.props.navigation.dispatch(backAction);
   }
@@ -74,26 +66,27 @@ export class AddACommentScreen extends Component {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
+        <TextInput style={{ width: Dimensions.get('window').width * 0.8, marginTop: 55 }} placeholderTextColor="green" placeholder="Title" editable onChangeText={(title) => this.setState({ title: title })} />
         <TextInput
           style={{
-            marginTop: 55,
+            marginTop: 35,
             marginBottom: 5,
             width: Dimensions.get('window').width * 0.8,
             alignSelf: 'center',
           }}
           editable
-          onChangeText={(text) => this.setState({ review: text })}
+          onChangeText={(text) => this.setState({ request: text })}
           multiline
-          numberOfLines={10}
-          placeholder="Write a review"
-          value={this.state.review}
+          numberOfLines={4}
+          placeholder="Explain your request"
+          value={this.state.request}
           placeholderTextColor="orange"
         />
 
         <Button
           raised
           backgroundColor="green"
-          onPress={this.rateIt}
+          onPress={this.submitRequest}
           title="Submit"
           buttonStyle={{ width: Dimensions.get("window").width * 0.8 }}
         />
@@ -109,4 +102,4 @@ const mapStateToProps = (state) => {
   return state;
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddACommentScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNewRequest);

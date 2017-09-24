@@ -50,9 +50,9 @@ export class ListOfGrades extends Component {
     const { uniqueID } = this.props;
     firebase.messaging().WILL_PRESENT_RESULT;
     firebase.messaging().subscribeToTopic(uniqueID.id);
-    firebase.messaging().onMessage((message) => {
+    /*firebase.messaging().onMessage((message) => {
       firebase.messaging().createLocalNotification({ body: message.body });
-    });
+    });*/
   }
   getUniqueId(email) {
     fetch('https://us-central1-svercbook.cloudfunctions.net/api/findUniqueId', {
@@ -67,7 +67,7 @@ export class ListOfGrades extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        this.props.uniqueId(responseJson.uniqueId);
+        this.props.uniqueId(responseJson.uniqueId, responseJson.name);
         this.props.admin(responseJson.admin);
         this.getDB();
         this.subscrub();

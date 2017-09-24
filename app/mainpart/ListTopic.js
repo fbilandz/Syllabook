@@ -44,7 +44,7 @@ export class ListTopic extends React.Component {
         <Row style={{ backgroundColor: '#BFECCF', top: 0 }}>
           <Image
             styleName="small rounded-corners placeholder"
-            source={{ uri: imageUrl }}
+            source={{ uri: imageUrl+'=s80' }}
           />
           <View styleName="vertical stretch space-between">
             <Subtitle numberOfLines={2}>{title}</Subtitle>

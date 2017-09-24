@@ -29,12 +29,6 @@ export class Req extends Component {
     return (
       <ScrollView contentContainerStyle={{ backgroundColor: '#ffffff', minHeight: Dimensions.get("window").height }}>
         <View style={styles.container}>
-          <Button
-            buttonStyle={{ width: Dimensions.get("window").width * 0.8, height: 45, marginTop: 25 }}
-            onPress={() => console.log("press")}
-            title="Add A Request"
-            backgroundColor="green"
-          />
           <List>
             {
               x.map((item, i) => (

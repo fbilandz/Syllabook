@@ -37,6 +37,7 @@ const uniqueID = (state = {}, action) => {
       return {
         ...state,
         id: action.id,
+        name: action.name,
       };
     case TOKEN_ID:
       return {

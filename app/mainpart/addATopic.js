@@ -23,10 +23,8 @@ export class AddATopic extends Component {
       data: this.props.navigation.state.params,
       loaded: false,
       text: '',
+      description: '',
     };
-    this.getData = this.getData.bind(this);
-    console.log(this.state.data);
-    console.log(this.props.navigation.state.key);
   }
   componentDidMount() {
     this.setState({
@@ -34,12 +32,13 @@ export class AddATopic extends Component {
     })
   }
   goToPhoto = () => {
-    this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: this.state.text, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject, nova: true, key: this.props.navigation.state.key })
+    this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: this.state.text, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject, nova: true, key: this.props.navigation.state.key, description: this.state.description })
   }
   render() {
     return (
       <View style={styles.containerz}>
         <TextInput editable placeholder="Topic name" maxLength={50} style={{ width: 250 }} onChangeText={(text) => this.setState({ text: text })} />
+        <TextInput editable placeholder="Describe topic briefly" multiline numberOfLines={5} style={{ width: 250 }} onChangeText={(description) => this.setState({ description: description })} />
         <Button title="Take inital photo" onPress={() => this.goToPhoto()} buttonStyle={{ width: 230 }} backgroundColor="blue" />
       </View>
     );

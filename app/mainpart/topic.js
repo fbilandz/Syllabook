@@ -30,26 +30,15 @@ export class Topic extends Component {
       grade,
       subject,
       topic,
-      data: this.props.database[grade][semester][subject][topic],
       width: Dimensions.get("window").width,
     };
   }
-  openListScreen(id) {
-    const { navigateTo, article } = this.props;
-    const route = {
-      screen: ext('ReviewListScreen'),
-      title: article.title,
-      props: {
-        article,
-        id,
-        getReviews: this.getReview,
-      },
-    };
-    navigateTo(route);
+  seeMore = (data) => {
+    this.props.navigation.navigate('CommentList', { topic: data.topic, imageUrl: data.imageUrl, title: data.title, unique_id: this.state.data.unique_id, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
   }
   deleteTopic = (topic) => {
     const { uniqueID } = this.props;
-    const { unique_id, grade, subject, semester } = this.state.data;
+    const { unique_id, grade, subject, semester } = this.state;
     firebase.database()
       .ref(`topics/${uniqueID.id}/${grade}/${semester}/${subject}/${topic}`)
       .remove((err) => console.log(err));
@@ -62,18 +51,20 @@ export class Topic extends Component {
     this.props.navigation.navigate('Photo', { unique_id: this.state.data.unique_id, topic: this.state.topic, grade: this.state.grade, semester: this.state.semester, subject: this.state.subject, nova: false })
   }
   goToImages = (data) => {
-    this.props.navigation.navigate('Images', { topic: data, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject });
+    this.props.navigation.navigate('Images', { topic: data, grade: this.state.grade, semester: this.state.semester, subject: this.state.subject });
   }
   render() {
     const { imageUrl, title } = this.props.navigation.state.params;
-    const { data, width } = this.state;
+    const { width } = this.state;
+    const { data } = this.props;
     console.log(data);
-    const x = data.comments.value === 0 ? 0 : _.values(data.comments).slice(0, 5);
+    const comments = _.values(data.comments)
+    const x = data.comments.value === 0 ? 0 : comments.slice(0, 5);
     return (
       <Screen styleName="full-screen paper">
         <ScrollView>
           <GameBanner articleImage={imageUrl} title={title} newsAuthor={data.author} timeUpdated={data.timestamp} />
-          <GameStats lastReview={data.timestamp} rating={data.rating} description={data.description} />
+          <GameStats lastReview={data.timestamp} rating={data.rating} description={data.description || ""} />
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 5 }}>
             <Button raised backgroundColor="#E3AD2B" title="Add to topic" iconRight icon={{ name: 'plus', type: 'octicon' }} buttonStyle={{ width: width * 0.4 }} onPress={() => this.goToPhoto(data)} />
             <Button raised backgroundColor="green" title="See all" iconRight icon={{ name: 'ios-arrow-forward-outline', type: 'ionicon' }} onPress={() => this.goToImages(data)} buttonStyle={{ width: width * 0.4 }} />
@@ -84,13 +75,14 @@ export class Topic extends Component {
           <List>
             {
               x === 0 ? <Text>No comments yet</Text> : x.map((item, i) => (
-                item !== 1 || i > 5 ? <Comment
+                item !== 1 || i > 4 ? <Comment
                   key={i}
                   data={item}
                 /> : null
               ))
             }
-          </List>
+           {comments.length > 5 && <Button title="See more" iconRight icon={{name: 'angle-right', type: 'font-awesome'}} onPress={() => this.seeMore()}/>}
+          </List> 
           {this.props.uniqueID.admin && <Delete onPress={this.deleteTopic} />}
         </ScrollView>
       </Screen>
@@ -102,8 +94,11 @@ const mapDispatchToProps = {
 
 };
 
-const mapStateToProps = (state) => {
-  return state;
-};
-
+const mapStateToProps = (state, ownProps) => {
+  const { grade, subject, semester, topic } = ownProps.navigation.state.params;
+  return {
+    data: state.database[grade][semester][subject][topic],
+    uniqueID: state.uniqueID
+  };
+}
 export default connect(mapStateToProps, mapDispatchToProps)(Topic);

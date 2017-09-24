@@ -44,7 +44,7 @@ export class Photo extends Component {
   }
   storePicture() {
     console.log(PicturePath);
-    const { grade, semester, subject, topic, nova } = this.state.data;
+    const { grade, semester, subject, topic, nova, description } = this.state.data;
     const { uniqueID } = this.props;
     const backAction = NavigationActions.back({
       key: this.state.data.key
@@ -69,7 +69,8 @@ export class Photo extends Component {
             firebase.database().ref(`topics/${uniqueID.id}/${grade}/${semester}/${subject}`)
               .push({
                 title: topic,
-                author: "NOIDEA",
+                author: uniqueID.name,
+                description,
                 timestamp: moment(),
                 rating: 0,
                 comments: {

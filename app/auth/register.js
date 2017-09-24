@@ -37,7 +37,7 @@ export class Register extends Component {
     super(props);
     this.state = {
       register: true,
-      user: '',
+      name: '',
       pass: '',
       passs: '',
       email: '',
@@ -77,8 +77,11 @@ export class Register extends Component {
     return true;
   }
   toDB(uniqueid, email) {
+    const { name } = this.state;
     firebase.database().ref('users/' + uniqueid).push({
       email,
+      name,
+      admin: false,
     }, (err) => console.log(err));
   }
   addUserToDB(uniqueid, user) {
@@ -126,6 +129,13 @@ export class Register extends Component {
       <View style={styles.container}>
 
         <View style={styles.textInputContainer}>
+          <TextInput
+            editable
+            maxLength={32}
+            placeholder="username"
+            style={styles.textinput}
+            onChangeText={(name) => { this.setState({ name }); }}
+            autoCapitalize="none" />
           <TextInput
             editable
             maxLength={32}

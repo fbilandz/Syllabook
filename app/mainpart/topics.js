@@ -13,7 +13,6 @@ import {
   RefreshControl,
   Dimensions
 } from 'react-native';
-import { Title, NavigationBar, Icon, Button, Spinner, ListView } from '@shoutem/ui';
 import styles from '../components/style';
 import Kartica from '../components/kartica';
 import { List, ListItem } from 'react-native-elements';
@@ -57,10 +56,8 @@ export class TopicList extends Component {
     this.props.navigation.navigate('AddATopic', { key: this.props.navigation.state.key, unique_id: this.state.data.unique_id, grade: this.state.data.grade, semester: this.state.data.semester, subject: this.state.data.subject })
   }
   render() {
-    const { database } = this.props;
-    const { grade, semester, subject } = this.state.data;
-    var x = database[grade][semester][subject];
-    var y = _.keys(database[grade][semester][subject]);
+    var x = this.props.database;
+    var y = _.keys(x);
     var width = Dimensions.get("window").width;
     if (y.length > 0 && x.value !== 0) {
       var index = y.indexOf("value");
@@ -91,7 +88,7 @@ export class TopicList extends Component {
               ))
             }
           </List>
-        </ScrollView >
+        </ScrollView>
       );
     } else {
       return (
@@ -108,8 +105,8 @@ export class TopicList extends Component {
 AppRegistry.registerComponent('TopicList', () => TopicList);
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps);
-  return state;
+  const { grade, semester, subject } = ownProps.navigation.state.params;
+  return { database: state.database[grade][semester][subject], uniqueID: state.uniqueID };
 }
 
 const mapDispatchToProps = {}

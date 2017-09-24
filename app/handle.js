@@ -16,6 +16,9 @@ import Topic from './mainpart/topic';
 import RateScreen from './mainpart/RateScreen';
 import AddACommentScreen from './mainpart/addAComment';
 import AddButton from './components/addButton';
+import CommentList from './mainpart/CommentList';
+import CreateNewRequest from './requests/createNewRequest';
+import CreateButton from './components/createButton';
 
 export const Handle = StackNavigator({
   Grades: {
@@ -85,9 +88,44 @@ export const Handle = StackNavigator({
     navigationOptions: {
       title: "Leave a Comment",
     }
-  }
+  },
+  CommentList: {
+    screen: CommentList,
+    navigationOptions: {
+      title: 'Comments',
+    },
+  },
 }, {
     initialRouteName: 'Grades',
+    cardStyle: {
+      backgroundColor: '#BFECCF'
+    },
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#00802b',
+      },
+      headerTintColor: '#fff'
+    }
+  });
+
+export const Requests = StackNavigator({
+  Req: {
+    screen: Req,
+    navigationOptions: (navigation) => ({
+      title: 'Requests',
+      headerStyle: { backgroundColor: '#00802b', marginBottom: 0, },
+      headerRight: (<CreateButton props={navigation} />),
+    }),
+  },
+  CreateNew: {
+    screen: CreateNewRequest,
+    navigationOptions: {
+      title: "Create new request",
+    }
+  }
+},
+  {
+    initialRouteName: 'Req',
     cardStyle: {
       backgroundColor: '#BFECCF'
     },
@@ -107,7 +145,7 @@ export const Admin = TabNavigator({
     }
   },
   Req: {
-    screen: Req,
+    screen: Requests,
     navigationOptions: {
       title: "Requests"
     }
@@ -145,7 +183,6 @@ export const Tabs = TabNavigator({
   },*/
 
 });
-
 
 const Root = StackNavigator({
   Tabs: {
