@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import Camera from 'react-native-camera';
 import { Icon, Button } from '@shoutem/ui';
+import { Icon as Ikona } from 'react-native-elements';
 import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux';
 import firebase from '../firebase/firebase';
@@ -29,7 +30,7 @@ export class Photo extends Component {
       taken: false,
       data: this.props.navigation.state.params,
     }
-    
+
   }
   takePicture() {
     this.camera.capture()
@@ -51,18 +52,16 @@ export class Photo extends Component {
     })
     let x;
     UUIDGenerator.getRandomUUID().then((uuid) => {
-      console.log(uuid);
       x = uuid;
       const metadata = {
         contentType: 'image/jpeg'
       }
-      console.log(x);
       firebase.storage()
         .ref(x + '.jpg')
         .putFile(PicturePath, metadata)
         .then((uploadedFile) => {
           let l;
-          console.log(uploadedFile);
+
           l = uploadedFile.downloadUrl;
           while (typeof l !== 'string');
           if (nova) {
@@ -98,7 +97,7 @@ export class Photo extends Component {
                 source: {
                   uri: l
                 }
-                
+
               },
               (err) => {
                 console.log(err);
@@ -110,32 +109,6 @@ export class Photo extends Component {
         });
 
     });
-		/*
-		var xhr = new XMLHttpRequest();
-		console.log(PicturePath);
-		if (PicturePath) {
-				var photo = {
-						uri: PicturePath,
-						type: 'image/jpeg',
-						name: 'photo.jpg',
-				};
- 
-				var body = new FormData();
-				body.append('grade', grade);
-				body.append('uniqueId', uniqueID);
-				body.append('title', topic);
-				body.append('subject', subject);
-				body.append('semester', semester);
-				body.append('photo', photo);
-				body.append('user', "Neki")
-				//body.append('title', 'A beautiful photo!');
-				body.append('nova', nova)
-				xhr.open('POST', "https://us-central1-svercbook.cloudfunctions.net/api/uploadPhoto");
-				xhr.send(body);
-				this.setState({
-						taken: false,
-				});
-				*/
     this.props.navigation.dispatch(backAction);
   }
 
@@ -151,7 +124,12 @@ export class Photo extends Component {
             aspect={Camera.constants.Aspect.fill}
             captureTarget={Camera.constants.CaptureTarget.disk}
             captureQuality={Camera.constants.CaptureQuality["1080p"]}>
-            <Button style={styles.capture} onPress={this.takePicture.bind(this)}><Icon name="photo" /></Button>
+            <Ikona
+              reverse
+              name='camera'
+              type='evilicon'
+              color='green'
+              onPress={this.takePicture.bind(this)} />
           </Camera>
         </View>
       );
@@ -160,7 +138,13 @@ export class Photo extends Component {
         <View style={{ flex: 1 }}>
           <Image
             source={{ uri: PicturePath, isStatic: true }} style={styles.preview}
-          ><Button style={styles.capture} onPress={this.storePicture.bind(this)}><Icon name="share" /></Button>
+          >
+            <Ikona
+              reverse
+              name='cloud-upload'
+              type='simple-line-icon'
+              color='green'
+              onPress={this.storePicture.bind(this)} />
           </Image>
         </View>
       );

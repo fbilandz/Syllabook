@@ -44,6 +44,7 @@ export class Req extends Component {
               ))
             }
           </List>
+          {x.length === 0 && <Text>No current requests</Text>}
         </View>
       </ScrollView>
     );

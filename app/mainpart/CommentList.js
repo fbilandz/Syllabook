@@ -43,6 +43,7 @@ export class CommentList extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { grade, semester, subject, topic } = ownProps.navigation.state.params;
+  console.log(grade, semester, subject, topic);
   return { comments: state.database[grade][semester][subject][topic].comments };
 };
 
